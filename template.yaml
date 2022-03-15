@@ -38,7 +38,7 @@ Resources:
         InvocationLevel:
           Type: Schedule
           Properties:
-            Schedule: cron(0 9-17 * * 1-5)
+            Schedule: cron(0 9-17 * * ? *)
               
   BlinkOutputBucket:
     Type: AWS::S3::Bucket
