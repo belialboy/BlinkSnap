@@ -18,22 +18,25 @@ Resources:
         Variables:
           outputBucket: !Ref BlinkOutputBucket
       Policies:
-      - AWSAccess
-      - Version: '2012-10-17' 
-        Statement:
-          - Effect: Allow
-            Action:
-              - s3:PutObject
-            Resource: 
-              !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref BlinkOutputBucket
-                  - '/*'
-          - Effect: Allow
-            Action:
-              - ssm:GetParameter
-            Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/BlinkCreds"
+        - AWSS3Access
+        - Version: '2012-10-17' 
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:PutObject
+              Resource: 
+                !Join
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref BlinkOutputBucket
+                    - '/*'
+        - AWSSSMAccess
+        - Version: '2012-10-17' 
+          Statement:
+            - Effect: Allow
+              Action:
+                - ssm:GetParameter
+              Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/BlinkCreds"
       Events:
         InvocationLevel:
           Type: Schedule
