@@ -10,8 +10,8 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Entered the build phase ...
-      - pip install pipreqs
-      - pipreqs src
+      #- pip install pipreqs
+      #- pipreqs src
       #Lambda deploy reference
       #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-deploying.html
       #Build spec reference
