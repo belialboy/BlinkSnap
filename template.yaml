@@ -18,7 +18,7 @@ Resources:
         Variables:
           outputBucket: !Ref BlinkOutputBucket
       Policies:
-        - AWSS3Access
+        - AWSLambdaExecute
         - Version: '2012-10-17' 
           Statement:
             - Effect: Allow
@@ -30,9 +30,6 @@ Resources:
                   - - 'arn:aws:s3:::'
                     - !Ref BlinkOutputBucket
                     - '/*'
-        - AWSSSMAccess
-        - Version: '2012-10-17' 
-          Statement:
             - Effect: Allow
               Action:
                 - ssm:GetParameter
