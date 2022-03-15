@@ -28,7 +28,7 @@ def lambda_handler(event, context):
         image_data = camera.get_media()       # Take a new picture with the camera
         object_name = "{}-{}.jpg".format(name,int(time.time()))
         object = s3.Object(os.environ['outputBucket'], object_name)
-        object.put(Body=image_data)
+        object.put(Body=image_data.content)
 
     logger.info("Profit!")
     return {
