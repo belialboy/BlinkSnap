@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  BlinkSnap
+
+Globals:
+  Function:
+    Timeout: 30
+
+Resources:
+  BlinkSnapFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Environment:
+        Variables:
+          outputBucket: !Ref BlinkOutputBucket
+      Policies:
+      - AWSAccess
+      - Version: '2012-10-17' 
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:PutObject
+            Resource: 
+              !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref BlinkOutputBucket
+                  - '/*'
+          - Effect: Allow
+            Action:
+              - ssm:GetParameter
+            Resource: "BlinkCreds"
+      Events:
+        InvocationLevel:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 9-17 * * 1-5)
+              
+  BlinkOutputBucket:
+    Type: AWS::S3::Bucket
+    
+Outputs:
+  HelloWorldFunction:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt BlinkSnapFunction.Arn
+  HelloWorldFunctionIamRole:
+    Description: "Blink Output Bucket"
+    Value: !GetAtt BlinkOutputBucket.Arn

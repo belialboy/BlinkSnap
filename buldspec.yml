@@ -1,0 +1,24 @@
+version: 0.2
+phases:
+    env:
+      parameter-store:
+        pPushBullet: "pPushBullet"
+  install:
+    runtime-versions:
+      python: 3.7
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Entered the build phase ...
+      - pip install pipreqs
+      - pipreqs src
+      #Lambda deploy reference
+      #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-deploying.html
+      #Build spec reference
+      #https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html
+      # Package SAM template
+      - sam build
+      # Deploy packaged SAM template
+      - sam deploy --stack-name 'BlinkSnap' --s3-bucket "blink-code-bucket" --capabilities "CAPABILITY_IAM"
+      - echo Done `date`
+      - curl --silent -u """$pPushBullet"":" -d type="note" -d body="Updated BlinkSnap" -d title="AWS Codebuild" 'https://api.pushbullet.com/v2/pushes'
