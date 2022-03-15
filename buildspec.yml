@@ -1,8 +1,8 @@
 version: 0.2
+env:
+  parameter-store:
+    pPushBullet: "pPushBullet"
 phases:
-    env:
-      parameter-store:
-        pPushBullet: "pPushBullet"
   install:
     runtime-versions:
       python: 3.7
