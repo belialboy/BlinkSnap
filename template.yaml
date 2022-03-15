@@ -33,7 +33,7 @@ Resources:
           - Effect: Allow
             Action:
               - ssm:GetParameter
-            Resource: "BlinkCreds"
+            Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/BlinkCreds"
       Events:
         InvocationLevel:
           Type: Schedule
