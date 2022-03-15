@@ -20,23 +20,21 @@ def lambda_handler(event, context):
     logger.info("Underpants!")
     
     blink = authBlink()
+    s3 = boto3.client("s3")
     
-    s3 = boto3.resource('s3')
-    
-    # blink.refresh(force=True)
     for name, camera in blink.cameras.items():
-        image_data = camera.get_media()       # Take a new picture with the camera
+        camera.snap_picture()       # Take a new picture with the camera
+        blink.refresh()
+        image = camera.get_media()
+        if image is None or image.status_code != 200:
+            logger.error("Failed to get the image")
+            exit()
+        
         object_name = "{}-{}.jpg".format(name,int(time.time()))
         object = s3.Object(os.environ['outputBucket'], object_name)
-        object.put(Body=image_data.content)
+        object.put(Body=image.raw)
 
     logger.info("Profit!")
-    return {
-        "statusCode": 200,
-        "body": json.dumps({
-            "message": "hello world"
-        }),
-    }
 
 def getSSM(ssm,parametername):
     try:
