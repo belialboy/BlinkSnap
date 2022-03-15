@@ -56,8 +56,13 @@ def authBlink():
     if blink_creds is False:
         exit()
     
-    auth = Auth(blink_creds)
+    json_creds = json.loads(blink_creds.replace("'","\""))
+
+    auth = Auth(json_creds)
     blink.auth = auth
     blink.start()
     
     return blink
+    
+if __name__ == "__main__":
+    lambda_handler(0,0)
