@@ -15,6 +15,7 @@ import os
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
 def lambda_handler(event, context):
     logger.info("Underpants!")
@@ -52,6 +53,7 @@ def putSSM(ssm,parametername,value):
              Overwrite=True
         )
     except ClientError as e:
+        print(e)
         logger.error("Failed to put {} SSM parameter".format(parametername))
     
 def authBlink():
@@ -69,8 +71,9 @@ def authBlink():
     auth = Auth(json_creds)
     blink.auth = auth
     blink.start()
-    
-    if blink.auth.login_attributes['token'] != json_creds['token']:
+
+    if blink.auth.login_attributes['token'] != json.loads(blink_creds.replace("'","\""))['token']:
+        print("Updating Creds")
         putSSM(ssm,"BlinkCreds",json.dumps(blink.auth.login_attributes))
     
     return blink
