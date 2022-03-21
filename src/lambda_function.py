@@ -20,7 +20,7 @@ def lambda_handler(event, context):
     logger.info("Underpants!")
     
     blink = authBlink()
-    s3 = boto3.client("s3")
+    s3 = boto3.resource('s3')
     
     for name, camera in blink.cameras.items():
         camera.snap_picture()       # Take a new picture with the camera
