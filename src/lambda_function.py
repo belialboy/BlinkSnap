@@ -32,7 +32,7 @@ def lambda_handler(event, context):
         
         object_name = "{}-{}.jpg".format(name,int(time.time()))
         object = s3.Object(os.environ['outputBucket'], object_name)
-        object.put(Body=image.raw)
+        object.put(Body=image.content)
 
     logger.info("Profit!")
 
