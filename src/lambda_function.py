@@ -70,7 +70,7 @@ def authBlink():
     blink.auth = auth
     blink.start()
     
-    if blink.auth.login_attributes['token'] != blink_creds['token']:
+    if blink.auth.login_attributes['token'] != json_creds['token']:
         putSSM(ssm,"BlinkCreds",json.dumps(blink.auth.login_attributes))
     
     return blink
