@@ -60,6 +60,8 @@ def authBlink():
     blink.auth = auth
     blink.start()
     
+    logger.info(blink.auth.login_attributes)
+    
     return blink
     
 if __name__ == "__main__":
