@@ -43,6 +43,16 @@ def getSSM(ssm,parametername):
     except ClientError as e:
         logger.error("Failed to get {} SSM parameter".format(parametername))
         return False
+def putSSM(ssm,parametername,value):
+    try:
+        response = ssm.put_parameter(
+             Name=parametername,
+             Value=value,
+             Type='String',
+             Overwrite=True
+        )
+    except ClientError as e:
+        logger.error("Failed to put {} SSM parameter".format(parametername))
     
 def authBlink():
     
@@ -60,7 +70,8 @@ def authBlink():
     blink.auth = auth
     blink.start()
     
-    logger.info(blink.auth.login_attributes)
+    if blink.auth.login_attributes['token'] != blink_creds['token']:
+        putSSM(ssm,"BlinkCreds",json.dumps(blink.auth.login_attributes))
     
     return blink
     
