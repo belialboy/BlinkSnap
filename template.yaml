@@ -11,9 +11,10 @@ Resources:
   BlinkSnapFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/
+      CodeUri: src/snap/
       Handler: lambda_function.lambda_handler
       Runtime: python3.7
+      Timeout: 180
       Environment:
         Variables:
           outputBucket: !Ref BlinkOutputBucket
@@ -39,15 +40,48 @@ Resources:
         InvocationLevel:
           Type: Schedule
           Properties:
-            Schedule: cron(0 9-17 * * ? *)
+            Schedule: cron(0 9-17 * * MON-FRI *)
+  
+  BlinkSnapMovieFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/movie/
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.7
+      Timeout: 180
+      Environment:
+        Variables:
+          outputBucket: !Ref BlinkOutputBucket
+      Policies:
+        - AWSLambdaExecute
+        - Version: '2012-10-17' 
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:PutObject
+                - s3:GetObject
+                - s3:ListBucket
+                - s3:GetBucketLocation
+              Resource: 
+                - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref BlinkOutputBucket
+                      - '/*'
+                - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref BlinkOutputBucket
+      Events:
+        InvocationLevel:
+          Type: Schedule
+          Properties:
+            Schedule: cron(5 17 * * FRI *)
               
   BlinkOutputBucket:
     Type: AWS::S3::Bucket
     
 Outputs:
-  HelloWorldFunction:
-    Description: "Lambda Function ARN"
-    Value: !GetAtt BlinkSnapFunction.Arn
-  HelloWorldFunctionIamRole:
+  OutputBucketArn:
     Description: "Blink Output Bucket"
     Value: !GetAtt BlinkOutputBucket.Arn
