@@ -3,9 +3,19 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   BlinkSnap
 
-Globals:
-  Function:
-    Timeout: 30
+Parameters:
+  pTwitterConsumerKey:
+    Type: String
+    Description: The Twitter Consumer Key (Get this from the Twitter Developer Dashboard)
+  pTwitterConsumerSecret:
+    Type: String
+    Description: The Twitter Consumer Secret (Get this from the Twitter Developer Dashboard)
+  pTwitterAccessTokenKey:
+    Type: String
+    Description: The Twitter Access Token Key (Get this from the Twitter Developer Dashboard)
+  pTwitterAccessTokenSecret:
+    Type: String
+    Description: The Twitter Access Token Secret (Get this from the Twitter Developer Dashboard)
 
 Resources:
   BlinkSnapFunction:
@@ -14,7 +24,7 @@ Resources:
       CodeUri: src/snap/
       Handler: lambda_function.lambda_handler
       Runtime: python3.7
-      Timeout: 180
+      Timeout: 30
       Environment:
         Variables:
           outputBucket: !Ref BlinkOutputBucket
@@ -48,10 +58,14 @@ Resources:
       CodeUri: src/movie/
       Handler: lambda_function.lambda_handler
       Runtime: python3.7
-      Timeout: 180
+      Timeout: 300
       Environment:
         Variables:
           outputBucket: !Ref BlinkOutputBucket
+          twitterConsumerKey: !Ref pTwitterConsumerKey
+          twitterConsumerSecret: !Ref pTwitterConsumerSecret
+          twitterAccessTokenKey: !Ref pTwitterAccessTokenKey
+          twitterAccessTokenSecret: !Ref pTwitterAccessTokenSecret
       Policies:
         - AWSLambdaExecute
         - Version: '2012-10-17' 

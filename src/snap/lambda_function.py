@@ -1,16 +1,11 @@
 import json
-
 import boto3
 from botocore.exceptions import ClientError
-
 from blinkpy.blinkpy import Blink
 from blinkpy.auth import Auth
 from blinkpy.helpers.util import json_load
-
 import logging
-
 import time
-
 import os
 
 logger = logging.getLogger()
