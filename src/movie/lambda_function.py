@@ -11,23 +11,20 @@ logger.setLevel(logging.INFO)
 logging.basicConfig(level=logging.INFO)
 
 def lambda_handler(event, context):
-    logger.info("Underpantz!")
+    logger.info("Underpants!")
     
     my_date = datetime.date.today()
     year, week_num, day_of_week = my_date.isocalendar()
     
     s3 = boto3.resource('s3')
-    bucket_name = "blinksnap-blinkoutputbucket-asptxvh6mdm"
-    #if "outputBucket" in os.environ:
-    #    bucket_name = os.environ['outputBucket']
-    logger.error(bucket_name)
+
+    bucket_name = os.environ['outputBucket']
+
     my_bucket = s3.Bucket(bucket_name)
     
-
     tmp = "/tmp/image.tmp"
     out = "/tmp/{year}-{week}-output.gif"
     images = []
-
     
     for my_bucket_object in my_bucket.objects.all():
         looping_week = -1
