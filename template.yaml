@@ -40,7 +40,7 @@ Resources:
         InvocationLevel:
           Type: Schedule
           Properties:
-            Schedule: cron(0 9-17 * * MON-FRI *)
+            Schedule: cron(0 9-17 ? * MON-FRI *)
   
   BlinkSnapMovieFunction:
     Type: AWS::Serverless::Function
@@ -76,7 +76,7 @@ Resources:
         InvocationLevel:
           Type: Schedule
           Properties:
-            Schedule: cron(5 17 * * FRI *)
+            Schedule: cron(5 17 ? * FRI *)
               
   BlinkOutputBucket:
     Type: AWS::S3::Bucket
