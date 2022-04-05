@@ -58,7 +58,7 @@ Resources:
       CodeUri: src/movie/
       Handler: lambda_function.lambda_handler
       Runtime: python3.7
-      Timeout: 300
+      Timeout: 600
       Environment:
         Variables:
           outputBucket: !Ref BlinkOutputBucket
