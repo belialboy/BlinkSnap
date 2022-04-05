@@ -52,7 +52,7 @@ def lambda_handler(event, context):
     logger.info("Uploading to twitter")
     twitter_image = twitter.upload_media(media=twitter_image_filestream)
     logger.info("Setting the status")
-    twitter.update_status(status="Week {week} of the coachhouse rebuild project. @JarraldM".format(week=13-week_num), media_ids=[twitter_image['media_id']])
+    twitter.update_status(status="Week {week}/20 of the coachhouse rebuild project. @JarraldM".format(week=week_num-13), media_ids=[twitter_image['media_id']])
     
     logger.info("Profit!")
 
