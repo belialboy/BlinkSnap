@@ -4,6 +4,7 @@ import logging
 import os
 import datetime
 from PIL import Image
+from PIL import ImageDraw
 from twython import Twython
 
 logger = logging.getLogger()
@@ -35,6 +36,7 @@ def lambda_handler(event, context):
                 logger.info("Creating Image object from downloaded file")
                 raw_image = Image.open(tmp)
                 logger.info("Resizing file to more managable dimensions")
+                ImageDraw.Draw(raw_image).text((0, 0), my_bucket_object.last_modified.strftime("%A"), (0, 0, 0))
                 images.append(raw_image.resize((640,360),reducing_gap=2.0))
                 
     logger.info("Got all the images I need for {} week {}".format(year,week_num))
