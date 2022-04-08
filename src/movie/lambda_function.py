@@ -16,14 +16,17 @@ def lambda_handler(event, context):
     
     my_date = datetime.date.today()
     year, week_num, day_of_week = my_date.isocalendar()
-    
+    print(os.system("ls /opt/ > /tmp/ls.txt"))
+    file = open("/tmp/ls.txt", 'rb')
+    print(file.read())
     s3 = boto3.resource('s3')
     bucket_name = os.environ['outputBucket']
+    bucket_name = "blinksnap-blinkoutputbucket-asptxvh6mdm"
 
     my_bucket = s3.Bucket(bucket_name)
     
-    tmp = "/tmp/image.tmp"
-    out = "/tmp/{year}-{week}-output.gif"
+    tmp = "/tmp/{index}.tmp"
+    out = "/tmp/{year}-{week}-output.mp4"
     images = []
     
     for my_bucket_object in my_bucket.objects.all():
@@ -32,16 +35,17 @@ def lambda_handler(event, context):
     
             if (file_year == year and file_week_num == week_num):
                 logger.info("Reading {} ({})".format(my_bucket_object.key,len(images)+1))
-                my_bucket.download_file(my_bucket_object.key, tmp)
-                logger.info("Creating Image object from downloaded file")
-                raw_image = Image.open(tmp)
-                logger.info("Resizing file to more managable dimensions")
-                ImageDraw.Draw(raw_image).text((0, 0), my_bucket_object.last_modified.strftime("%A"), (0, 0, 0))
-                images.append(raw_image.resize((640,360),reducing_gap=2.0))
+                my_bucket.download_file(my_bucket_object.key, tmp.format(index=my_bucket_object.key))
+                #logger.info("Creating Image object from downloaded file")
+                #raw_image = Image.open(tmp)
+                #logger.info("Resizing file to more managable dimensions")
+                #ImageDraw.Draw(raw_image).text((0, 0), my_bucket_object.last_modified.strftime("%A"), (0, 0, 0))
+                #images.append(raw_image.resize((640,360),reducing_gap=2.0))
                 
     logger.info("Got all the images I need for {} week {}".format(year,week_num))
     out_file = out.format(year=year,week=week_num)
-    write_out(images,out_file,my_bucket)
+    #write_out(images,out_file,my_bucket)
+    os.system("/opt/bin/ffmpeg -framerate 2 -pattern_type glob -i '{infiles}' \ -c:v libx264 -pix_fmt yuv420p {outfile}".format(infiles=tmp.format(index="*"),outfile=out_file))
     
     logger.info("Creating a twitter client")
     twitter = Twython(os.environ["twitterConsumerKey"], 
