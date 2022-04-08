@@ -14,7 +14,7 @@ phases:
     commands:
       - sam build
       # Deploy packaged SAM template
-      - sam deploy --stack-name 'BlinkSnap' --s3-bucket "blink-code-bucket" --capabilities "CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND" --parameter-overrides "ParameterKey=pTwitterAccessTokenKey,ParameterValue=$pTwitterAccessTokenKey ParameterKey=pTwitterAccessTokenSecret,ParameterValue=$pTwitterAccessTokenSecret ParameterKey=pTwitterConsumerKey,ParameterValue=$pTwitterConsumerKey ParameterKey=pTwitterConsumerSecret,ParameterValue=$pTwitterConsumerSecret"
+      - sam deploy --stack-name 'BlinkSnap' --s3-bucket "blink-code-bucket" --capabilities "CAPABILITY_IAM, CAPABILITY_AUTO_EXPAND" --parameter-overrides "ParameterKey=pTwitterAccessTokenKey,ParameterValue=$pTwitterAccessTokenKey ParameterKey=pTwitterAccessTokenSecret,ParameterValue=$pTwitterAccessTokenSecret ParameterKey=pTwitterConsumerKey,ParameterValue=$pTwitterConsumerKey ParameterKey=pTwitterConsumerSecret,ParameterValue=$pTwitterConsumerSecret"
   post_build:
     commands:
       # Send a Pushbullet notification about the update to the stack
