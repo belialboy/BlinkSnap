@@ -21,7 +21,6 @@ def lambda_handler(event, context):
     print(file.read())
     s3 = boto3.resource('s3')
     bucket_name = os.environ['outputBucket']
-    bucket_name = "blinksnap-blinkoutputbucket-asptxvh6mdm"
 
     my_bucket = s3.Bucket(bucket_name)
     
