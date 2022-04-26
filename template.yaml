@@ -18,12 +18,6 @@ Parameters:
     Description: The Twitter Access Token Secret (Get this from the Twitter Developer Dashboard)
 
 Resources:
-  ffmpeglambdalayer:
-    Type: AWS::Serverless::Application
-    Properties:
-      Location:
-        ApplicationId: arn:aws:serverlessrepo:us-east-1:145266761615:applications/ffmpeg-lambda-layer
-        SemanticVersion: 1.0.0
   
   BlinkSnapFunction:
     Type: AWS::Serverless::Function
@@ -32,8 +26,6 @@ Resources:
       Handler: lambda_function.lambda_handler
       Runtime: python3.9
       Timeout: 30
-      Layers:
-        - !GetAtt ffmpeglambdalayer.Outputs.LayerVersion
       Environment:
         Variables:
           outputBucket: !Ref BlinkOutputBucket
