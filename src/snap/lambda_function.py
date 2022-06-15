@@ -19,13 +19,16 @@ def lambda_handler(event, context):
     s3 = boto3.resource('s3')
     
     for name, camera in blink.cameras.items():
+        if "SingleCamera" in os.environ
+            if os.environ['SingleCamera'] != name:
+                break
         camera.snap_picture()       # Take a new picture with the camera
         blink.refresh()
         image = camera.get_media()
         if image is None or image.status_code != 200:
             logger.error("Failed to get the image")
             exit()
-        
+
         object_name = "{}-{}.jpg".format(name,int(time.time()))
         object = s3.Object(os.environ['outputBucket'], object_name)
         object.put(Body=image.content)
