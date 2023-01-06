@@ -19,7 +19,7 @@ def lambda_handler(event, context):
     s3 = boto3.resource('s3')
     
     for name, camera in blink.cameras.items():
-        if "SingleCamera" in os.environ
+        if "SingleCamera" in os.environ:
             if os.environ['SingleCamera'] != name:
                 break
         camera.snap_picture()       # Take a new picture with the camera
